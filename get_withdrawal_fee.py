@@ -1,4 +1,6 @@
 from binance.client import Client
+import schedule
+import time
 
 def get_withdrawal_fee(coin_symbol="DOGE"):
     try:
@@ -13,6 +15,11 @@ def get_withdrawal_fee(coin_symbol="DOGE"):
     except Exception as e:
         print(f"An error occurred: {repr(e)}")
 
+def job():
+    coin_symbols = ["DOGE", "BTC", "SHIB"]
+    for symbol in coin_symbols:
+        get_withdrawal_fee(symbol)
+
 if __name__ == "__main__":
     with open("api-access-key.txt", "r") as f:
         api_key = f.read().strip()
@@ -20,5 +27,9 @@ if __name__ == "__main__":
         api_secret = f.read().strip()
 
     client = Client(api_key, api_secret, tld="us")
-    coin_symbol = input("coin:").strip()
-    get_withdrawal_fee(coin_symbol)
+
+    schedule.every(30).minutes.do(job)
+
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
