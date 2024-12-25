@@ -1,9 +1,10 @@
-from flask import Flask, render_template
-import schedule
-import time
 import os
+import time
 
+import schedule
 from binance.client import Client
+from flask import Flask, render_template
+
 from get_withdrawal_fee import get_withdrawal_fee
 
 app = Flask(__name__)
