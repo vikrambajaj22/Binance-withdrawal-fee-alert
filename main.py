@@ -9,6 +9,8 @@ from get_withdrawal_fee import get_withdrawal_fee
 
 app = Flask(__name__)
 
+global client
+
 @app.route("/")
 def index():
     data = job()
