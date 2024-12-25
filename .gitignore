@@ -2,4 +2,5 @@ api-access-key.txt
 api-secret-key.txt
 binance-alert-gmail-app-password.txt
 .env.sh
-__pycache__/**
+__pycache__/*
+env_variables.yaml

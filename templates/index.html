@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Binance Withdrawal Fee Alert</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+  </head>
+  <body>
+    <h1>Binance Withdrawal Fees</h1>
+    {% for coin in data %}
+        <h2>{{ coin }}</h2>
+        <ul>
+            <li><b>Network</b>: {{ data[coin]['network'] }}</li>
+            <li><b>Withdrawal Fee</b>: {{ data[coin]['fee'] }} {{ coin }}</li>
+            <li><b>Withdrawal Fee Value</b>: {{ data[coin]['fee_value'] }} USDT @ 1 {{ coin }} = {{ data[coin]['usdt_price'] }} USDT</li>
+            <li><b>Min Withdrawal</b>: {{ data[coin]['withdraw_min'] }} {{ coin }}</li>
+            <li><b>Max Withdrawal</b>: {{ data[coin]['withdraw_max'] }} {{ coin }}</li>
+        </ul>
+        <br />
+    {% endfor %}
+  </body>
+</html>
