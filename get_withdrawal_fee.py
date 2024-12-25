@@ -7,7 +7,7 @@ from binance.client import Client
 from send_mail import send_email_alert
 
 
-def get_withdrawal_fee(coin_symbol="DOGE", chosen_network="DOGE", threshold_value=50):
+def get_withdrawal_fee(coin_symbol="DOGE", chosen_network="DOGE", threshold_fee=50, threshold_fee_value=10):
     try:
         price = float(client.get_symbol_ticker(symbol=coin_symbol+"USDT")["price"])
         all_coins_info = client.get_all_coins_info()
@@ -25,8 +25,8 @@ def get_withdrawal_fee(coin_symbol="DOGE", chosen_network="DOGE", threshold_valu
                             "withdraw_min": network["withdrawMin"],
                             "withdraw_max": network["withdrawMax"]
                         }
-                        if float(coin_details["fee"]) < threshold_value:
-                            send_email_alert(coin_symbol, coin_details["fee"])
+                        if float(coin_details["fee"]) < threshold_fee or coin_details["fee_value"] < threshold_fee_value:
+                            send_email_alert(coin_symbol, coin_details)
                         break
                 break
         return coin_details
@@ -39,7 +39,6 @@ def job():
     coin_details = {}
     for symbol, (network, threshold_fee, threshold_fee_value) in coin_symbols.items():
         coin_details[symbol] = get_withdrawal_fee(symbol, network, threshold_fee, threshold_fee_value)
-    print(coin_details)
 
 if __name__ == "__main__":
     api_key = os.genenv("BINANCE_API_ACCESS_KEY", "")
