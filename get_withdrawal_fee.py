@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     client = Client(api_key, api_secret, tld="us")
 
-    schedule.every(10).seconds.do(job)
+    schedule.every(30).minutes.do(job)
 
     while True:
         schedule.run_pending()
