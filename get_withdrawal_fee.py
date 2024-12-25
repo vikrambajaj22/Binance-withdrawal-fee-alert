@@ -1,4 +1,8 @@
+import requests
+
 from send_mail import send_email_alert
+
+requests.packages.urllib3.util.connection.HAS_IPV6 = False
 
 
 def get_withdrawal_fee(binance_client, coin_symbol="DOGE", chosen_network="DOGE", threshold_fee=50, threshold_fee_value=10):
