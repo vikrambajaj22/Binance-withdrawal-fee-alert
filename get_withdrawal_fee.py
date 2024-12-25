@@ -1,8 +1,13 @@
-from binance.client import Client
-import schedule
+import os
 import time
 
-def get_withdrawal_fee(coin_symbol="DOGE", chosen_network="DOGE"):
+import schedule
+from binance.client import Client
+
+from send_mail import send_email_alert
+
+
+def get_withdrawal_fee(coin_symbol="DOGE", chosen_network="DOGE", threshold_value=50):
     try:
         price = float(client.get_symbol_ticker(symbol=coin_symbol+"USDT")["price"])
         all_coins_info = client.get_all_coins_info()
@@ -20,6 +25,8 @@ def get_withdrawal_fee(coin_symbol="DOGE", chosen_network="DOGE"):
                             "withdraw_min": network["withdrawMin"],
                             "withdraw_max": network["withdrawMax"]
                         }
+                        if float(coin_details["fee"]) < threshold_value:
+                            send_email_alert(coin_symbol, coin_details["fee"])
                         break
                 break
         return coin_details
@@ -27,21 +34,20 @@ def get_withdrawal_fee(coin_symbol="DOGE", chosen_network="DOGE"):
         print(f"An error occurred: {repr(e)}")
 
 def job():
-    coin_symbols = {"DOGE": "DOGE", "BTC": "BTC", "SHIB": "ETH"}  # symbol:network
+    # each coin symbol has a tuple with network, threshold fee, and threshold fee_value
+    coin_symbols = {"DOGE": ("DOGE", 50, 10), "BTC": ("BTC", 0.0004, 20), "SHIB": ("ETH", 301765, 5)}
     coin_details = {}
-    for symbol, network in coin_symbols.items():
-        coin_details[symbol] = get_withdrawal_fee(symbol, network)
+    for symbol, (network, threshold_fee, threshold_fee_value) in coin_symbols.items():
+        coin_details[symbol] = get_withdrawal_fee(symbol, network, threshold_fee, threshold_fee_value)
     print(coin_details)
 
 if __name__ == "__main__":
-    with open("api-access-key.txt", "r") as f:
-        api_key = f.read().strip()
-    with open("api-secret-key.txt", "r") as f:
-        api_secret = f.read().strip()
+    api_key = os.genenv("BINANCE_API_ACCESS_KEY", "")
+    api_secret = os.genenv("BINANCE_API_SECRET_KEY", "")
 
     client = Client(api_key, api_secret, tld="us")
 
-    schedule.every(1).hour.do(job)
+    schedule.every(10).seconds.do(job)
 
     while True:
         schedule.run_pending()
