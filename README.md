@@ -1,6 +1,6 @@
 # Binance Withdrawal Fee Alert
 
-Hosted on Google Cloud App Engine. Sends custom email alerts when withdrawal fees drop below preset thresholds.
+Deployed via Google Cloud App Engine on host: https://binance-alert-445819.uk.r.appspot.com. Sends custom email alerts when withdrawal fees drop below preset thresholds.
 
 Environment setup:
 ```
