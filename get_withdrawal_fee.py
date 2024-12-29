@@ -25,6 +25,8 @@ def get_withdrawal_fee(binance_client, coin_symbol="DOGE", chosen_network="DOGE"
                         }
                         if float(coin_details["fee"]) < threshold_fee or coin_details["fee_value"] < threshold_fee_value:
                             send_email_alert(coin_symbol, coin_details)
+                        elif coin_symbol == "SHIB" and coin_details["withdraw_min"] <= 476796:
+                            send_email_alert(coin_symbol, coin_details, message="Withdrawal min is less than 476796")
                         break
                 break
         return coin_details
