@@ -21,7 +21,8 @@ def index():
 
 def job():
     # each coin symbol has a tuple with network, threshold fee, and threshold fee_value
-    coin_symbols = {"DOGE": ("DOGE", 50, 10), "BTC": ("BTC", 0.0004, 20), "SHIB": ("ETH", 100000, 2), "USDC": ("AVAXC", 0.5, 1)}
+    # coin_symbols = {"DOGE": ("DOGE", 50, 10), "BTC": ("BTC", 0.0004, 20), "SHIB": ("ETH", 100000, 2), "USDC": ("AVAXC", 0.5, 1)}
+    coin_symbols = {"BTC": ("BTC", 0.0004, 20), "USDC": ("AVAXC", 0.5, 1)}
     coin_details = {}
     for symbol, (network, threshold_fee, threshold_fee_value) in coin_symbols.items():
         coin_details[symbol] = get_withdrawal_fee(client, symbol, network, threshold_fee, threshold_fee_value)
